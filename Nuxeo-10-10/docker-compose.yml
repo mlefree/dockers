@@ -1,0 +1,84 @@
+version: '3.7'
+services:
+
+  nuxeo:
+    build:
+      context: .
+      dockerfile: nuxeo.Dockerfile
+    image: nuxeo:10.10
+    ports:
+      - "80:8080"
+    depends_on:
+      - mail
+    environment:
+      NUXEO_CLID: ${CLID}
+      # NUXEO_PACKAGES: nuxeo-web-ui nuxeo-jsf-ui nuxeo-jsf-to-web-ui nuxeo-drive nuxeo-dam nuxeo-imap-connector nuxeo-diff-pictures nuxeo-showcase-content nuxeo-spreadsheet nuxeo-vision nuxeo-arender easyshare nuxeo-csv
+      NUXEO_CUSTOM_PARAM: JAVA_OPTS=$$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\nnuxeo.url=http://nuxeo.yourcorp.com/nuxeo/\narender.server.rendition.hosts=http://arendition:8761\narender.server.previewer.host=http://apreviewer.yourcorp.com:8080\norg.nuxeo.vision.google.key=${GOOGLE_VISION_KEY}\n${MAIL_CONFIG}
+    volumes:
+      - ".gen/nuxeo_log:/var/log/"
+      - ".gen/nuxeo_store:/opt/nuxeo/server/packages/store"
+      - ".gen/nuxeo_data:/var/lib/nuxeo/data"
+      - "../.assets/box:/opt/nuxeo/assets_csv"
+      - ".nuxeo_docker-entrypoint-initnuxeo.d:/docker-entrypoint-initnuxeo.d"
+      - ".nuxeo_packages:/opt/nuxeo/packages"
+      - ".nuxeo_plugins:/opt/nuxeo/server/nxserver/plugins"
+      - ".nuxeo_templates:/opt/nuxeo/custom_templates"
+      - "./nuxeo.conf:/docker-entrypoint-initnuxeo.d/nuxeo.conf"
+    hostname: nuxeo.yourcorp.com
+    networks:
+      internal-network:
+        aliases:
+          - nuxeo.yourcorp.com
+
+  node:
+    build:
+      context: .
+      dockerfile: node.Dockerfile
+    image: node:lts-jessie
+    ports:
+      - "3110:3000"
+    environment:
+      NUXEO_URL: "http://nuxeo.yourcorp.com:8080/nuxeo"
+      NUXEO_LOGIN: Administrator
+      NUXEO_PASSWORD: Administrator
+      NUXEO_PUBLIC_URL: "http://nuxeo.yourcorp.com/nuxeo"
+    volumes:
+      - ".node_data:/usr/local/lib/node_modules/nuxeo-node-example/data"
+    networks:
+      - internal-network
+
+#  apreviewer:
+#    image: dockerin-arender.nuxeo.com:443/arender-previewer:1.0.2-SNAPSHOT
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - renditionHostEnv=http://arendition:8761
+#    depends_on:
+#      - arendition
+#    hostname: apreviewer.yourcorp.com
+#    networks:
+#      internal-network:
+#        aliases:
+#          - apreviewer.yourcorp.com
+#
+#  arendition:
+#    image: dockerin-arender.nuxeo.com:443/arender-rendition:1.0.2-SNAPSHOT
+#    networks:
+#      - internal-network
+
+  mail:
+    image: antespi/docker-imap-devel:latest
+    ports:
+      - "25:25"
+      - "143:143"
+      - "993:993"
+    environment:
+      - MAILNAME=yourcorp.com
+      - MAIL_ADDRESS=nuxeo@yourcorp.com
+      - MAIL_PASS=nuxeo
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge

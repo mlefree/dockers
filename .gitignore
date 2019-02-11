@@ -1,0 +1,24 @@
+# common ignores
+.classpath
+.project
+.settings
+.idea
+.tmp
+*~
+*~bak
+*-bak
+*.bak
+*-new
+*.rej
+*.orig
+.DS_Store
+node_modules/
+dist/
+bower_components/
+
+
+# .assets/
+.idea/
+.old/
+.gen/
+.env
