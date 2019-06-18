@@ -1,6 +1,6 @@
-# Nuxeo demo Out Of The Box (all inclusive)
+# Nuxeo demo Out Of The Box
 
-> Add DAM features, contents, Annotation, IMAP features, and a [node example app](https://github.com/mlefree/nuxeo-node-example)
+> simple nuxeo
    
 ### Demo requirements
 

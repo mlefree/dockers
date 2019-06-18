@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+
+  nuxeo:
+    build:
+      context: .
+      dockerfile: nuxeo.Dockerfile
+    image: nuxeo:10.10
+    ports:
+      - "3110:8080"
+    environment:
+      NUXEO_CLID: ${CLID}
+      NUXEO_CUSTOM_PARAM: JAVA_OPTS=$$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\nnuxeo.url=http://nuxeo.yourcorp.com:3110/nuxeo/\n${GENERAL_CONF}
+    volumes:
+      - ".gen/nuxeo_log:/var/log/"
+      - ".gen/nuxeo_store:/opt/nuxeo/server/packages/store"
+      - ".gen/nuxeo_data:/var/lib/nuxeo/data:cached"
+      - ".nuxeo_docker-entrypoint-initnuxeo.d:/docker-entrypoint-initnuxeo.d"
+      - ".nuxeo_packages:/opt/nuxeo/packages"
+      - ".nuxeo_plugins:/opt/nuxeo/server/nxserver/plugins"
+      - ".nuxeo_templates:/opt/nuxeo/custom_templates"
+    hostname: nuxeo.yourcorp.com
+

@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+
+
+
+  traefik:
+    image: traefik:latest
+    #container_name: traefik
+    command: --api --docker
+    ports:
+      - 80:80
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:traefik.yourcorp.com"
+    depends_on:
+      - nuxeo
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+
+  nuxeo:
+    build:
+      context: .
+      dockerfile: nuxeo.Dockerfile
+    image: nuxeo:10.10
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kibana
+    environment:
+      #NUXEO_CLID: ${CLID}
+      NUXEO_CUSTOM_PARAM: JAVA_OPTS=$$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\nnuxeo.url=http://nuxeo.yourcorp.com:8113/nuxeo/\n${GENERAL_CONF}\n${MAIL_CONF}\n${VISION_CONF}\n${MAPS_CONF}\n${STT_CONF}\n${SENT_CONF}\n${SIMFLOFY_CONF}\n${RECORDLION_CONF}\n${ONLYOFFICE_CONF}\n${DLP_CONF}
+    volumes:
+      - ".gen/nuxeo_log:/var/log/"
+      - ".gen/nuxeo_store:/opt/nuxeo/server/packages/store"
+      - ".gen/nuxeo_data:/var/lib/nuxeo/data:cached"
+      - ".nuxeo_docker-entrypoint-initnuxeo.d:/docker-entrypoint-initnuxeo.d"
+      - ".nuxeo_packages:/opt/nuxeo/packages"
+      - ".nuxeo_plugins:/opt/nuxeo/server/nxserver/plugins"
+      - ".nuxeo_templates:/opt/nuxeo/custom_templates"
+      # - "./nuxeo.conf:/docker-entrypoint-initnuxeo.d/nuxeo.conf"
+
+    labels:
+      - "traefik.http.port=8080"
+      - "traefik.http.frontend.rule=Host:nuxeo.yourcorp.com"
+      - "traefik.direct.port=8080"
+      - "traefik.direct.frontend.rule=Host:nuxeo-node.yourcorp.com"
+      - "traefik.backend.healthcheck.path=/nuxeo/runningstatus"
+      - "traefik.backend.healthcheck.port=8080"
+      - "traefik.backend.healthcheck.interval=10s"
+    hostname: nuxeo.yourcorp.com
+

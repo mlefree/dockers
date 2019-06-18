@@ -4,12 +4,16 @@
 
 | Id | Folder | Description | Remarks |
 | ------ | ------ | ----------- | ----------- |
-| 1 | Nuxeo-10-10 | Nuxeo 10.10 (LTS 2019) out Of The Box with all included (DAM, ARender, AI, IMAP)  |  |
+| 1 | Nuxeo-10-10 | Nuxeo 10.10 (LTS 2019) out Of The Box with all included (DAM, annotation, AI, IMAP)  |  |
+| 2 | Nuxeo-10-10-Front | Nuxeo 10.10 (LTS 2019) Out Of The Box with a Traeffik frontside  |  |
+| 3 | Nuxeo-10-10-OOTB | Nuxeo 10.10 (LTS 2019) Out Of The Box with nothing more  |  |
 
 
 ## Prerequisites
 
-Need an **/etc/hosts** like :
+Software : Docker
+
+Annotation (1) needs an **/etc/hosts** like :
 
 ```.env
 127.0.0.1       localhost
@@ -18,14 +22,13 @@ Need an **/etc/hosts** like :
 127.0.0.1       nuxeo.yourcorp.com apreviewer.yourcorp.com
 ```
 
-Software : Docker
 
 ## Start
 
 Start existing demo :
 
 ```bash
-cd Nuxeo-10-10    
+cd Nuxeo-10-10-OOTB 
 . launch.sh 
 # or (with caution)
 . launch.sh --clean
@@ -48,7 +51,7 @@ nuxeoctl mp-list
 
 ## Todo
 
-- [ ] Fixing ARender integration
+- [ ] Fixing annotation integration
 
 
 ## Support

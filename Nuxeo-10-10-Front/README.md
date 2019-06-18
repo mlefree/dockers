@@ -1,6 +1,8 @@
-# Nuxeo demo Out Of The Box (all inclusive)
+# Nuxeo demo Out Of The Box With a Front traefik
 
-> Add DAM features, contents, Annotation, IMAP features, and a [node example app](https://github.com/mlefree/nuxeo-node-example)
+> simple nuxeo
+
+**IN PROGRESS**
    
 ### Demo requirements
 
