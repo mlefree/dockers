@@ -1,7 +1,7 @@
 #!/bin/bash
 
-declare -a packages=("nuxeo-web-ui"  "easyshare" "nuxeo-csv" "nuxeo-dam" "nuxeo-diff"   "nuxeo-showcase-content"    "nuxeo-spreadsheet" "nuxeo-diff-pictures"   "nuxeo-imap-connector"  "nuxeo-liveconnect" )
-declare -a versions=("2.4.0"         "1.5.3"     "1.7.3"     "6.4.3"     "1.9.3"        "1.3.3"                     "1.4.3"             "1.3.3"                 "1.4.3"                 "1.3.3"             )
+declare -a packages=("nuxeo-web-ui"   "nuxeo-jsf-ui"    "easyshare" "nuxeo-csv" "nuxeo-dam" "nuxeo-diff"   "nuxeo-showcase-content"    "nuxeo-spreadsheet" "nuxeo-diff-pictures"   "nuxeo-imap-connector"  "nuxeo-liveconnect" )
+declare -a versions=("2.4.0"          "10.10.0"         "1.5.3"     "1.7.3"     "6.4.3"     "1.9.3"        "1.3.3"                     "1.4.3"             "1.3.3"                 "1.4.3"                 "1.3.3"             )
 
 # get length of an array
 arraylength=${#packages[@]}
